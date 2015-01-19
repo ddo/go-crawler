@@ -7,7 +7,7 @@ import (
 )
 
 func TestFetch(t *testing.T) {
-	urls, err := crawler.Fetch("http://ddict.me", &crawler.AnchorFilter{})
+	urls, err := crawler.Fetch("http://ddict.me", &crawler.AnchorPicker{})
 
 	if err != nil {
 		t.Fail()

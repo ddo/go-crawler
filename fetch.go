@@ -24,14 +24,14 @@ func get(url string) (string, error) {
 	return string(html), nil
 }
 
-func Fetch(url string, f Filter) ([]string, error) {
+func Fetch(url string, f Picker) ([]string, error) {
 	html, err := get(url)
 
 	if err != nil {
 		return nil, err
 	}
 
-	urls, err := f.Filter(html)
+	urls, err := f.Picker(html)
 
 	if err != nil {
 		return nil, err

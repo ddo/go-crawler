@@ -6,14 +6,14 @@ import (
 	"github.com/PuerkitoBio/goquery"
 )
 
-type Filter interface {
-	Filter(string) ([]string, error)
+type Picker interface {
+	Picker(string) ([]string, error)
 }
 
-//default filter
-type AnchorFilter struct{}
+//default picker
+type AnchorPicker struct{}
 
-func (f *AnchorFilter) Filter(html string) (urls []string, err error) {
+func (p *AnchorPicker) Picker(html string) (urls []string, err error) {
 	doc, err := goquery.NewDocumentFromReader(strings.NewReader(html))
 
 	if err != nil {

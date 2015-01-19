@@ -3,14 +3,12 @@ package crawler
 import (
 	"reflect"
 	"testing"
-
-	"."
 )
 
-func TestAnchorFilter(t *testing.T) {
-	anchor := &crawler.AnchorFilter{}
+func TestAnchorPicker(t *testing.T) {
+	anchor := &AnchorPicker{}
 
-	urls, err := anchor.Filter("<a href='http://ddo.me'>test</a><a href='http://ddict.me'>test</a>")
+	urls, err := anchor.Picker("<a href='http://ddo.me'>test</a><a href='http://ddict.me'>test</a>")
 
 	if err != nil {
 		t.Fail()
