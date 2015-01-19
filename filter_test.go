@@ -19,6 +19,10 @@ func TestUniqueFilter(t *testing.T) {
 	if !f.Filter(parseUrl("http://ddo.me")) {
 		t.Error("UniqueFilter new url")
 	}
+
+	if f.Filter(parseUrl("http://ddo.me#hello")) {
+		t.Error("UniqueFilter ignore fragment")
+	}
 }
 
 func TestSameHostFilter(t *testing.T) {

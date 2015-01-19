@@ -18,6 +18,16 @@ func (f *UniqueFilter) Filter(u *url.URL) bool {
 		if *u == *old_u {
 			return false
 		}
+
+		another_u := *u
+		another_old_u := *old_u
+
+		another_u.Fragment = ""
+		another_old_u.Fragment = ""
+
+		if another_u == another_old_u {
+			return false
+		}
 	}
 
 	f.urls = append(f.urls, u)
