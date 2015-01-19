@@ -30,19 +30,19 @@ func TestSameHostFilter(t *testing.T) {
 		parseUrl("http://ddict.me"),
 	}
 
-	if f.Filter(parseUrl("http://ddict.me")) {
+	if !f.Filter(parseUrl("http://ddict.me")) {
 		t.Error("SameHostFilter same url")
 	}
 
-	if f.Filter(parseUrl("http://ddict.me/haha")) {
+	if !f.Filter(parseUrl("http://ddict.me/haha")) {
 		t.Error("SameHostFilter same host")
 	}
 
-	if !f.Filter(parseUrl("http://ddo.me")) {
+	if f.Filter(parseUrl("http://ddo.me")) {
 		t.Error("SameHostFilter diff host")
 	}
 
-	if !f.Filter(parseUrl("http://dashboard.ddict.me")) {
+	if f.Filter(parseUrl("http://dashboard.ddict.me")) {
 		t.Error("SameHostFilter sub domain")
 	}
 }
