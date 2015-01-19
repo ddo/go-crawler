@@ -2,12 +2,10 @@ package crawler
 
 import (
 	"testing"
-
-	"."
 )
 
 func TestFetch(t *testing.T) {
-	urls, err := crawler.Fetch("http://ddict.me", &crawler.AnchorPicker{})
+	urls, err := Fetch("http://ddict.me", &AnchorPicker{})
 
 	if err != nil {
 		t.Fail()
