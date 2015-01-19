@@ -18,6 +18,10 @@ func TestUniqueFilter(t *testing.T) {
 	if !f.Filter("http://ddo.me") {
 		t.Error("UniqueFilter new url")
 	}
+
+	if f.Filter("http://ddict.me/") {
+		t.Error("UniqueFilter duplicated url again")
+	}
 }
 
 func TestSameHostFilter(t *testing.T) {
