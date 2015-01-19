@@ -5,10 +5,17 @@ import (
 )
 
 type Filter interface {
-	Filter(string) bool
+	Filter(*url.URL) bool
 }
 
-//default Filter
+//is url Filter
+type UrlFilter struct{}
+
+func (f *UrlFilter) Filter(u *url.URL) bool {
+	return u.Scheme == "" || u.Scheme == "http" || u.Scheme == "https"
+}
+
+//no duplicated Filter
 type UniqueFilter struct {
 	urls []*url.URL
 }

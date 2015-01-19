@@ -5,6 +5,30 @@ import (
 	"testing"
 )
 
+func TestUrlFilter(t *testing.T) {
+	f := &UrlFilter{}
+
+	if !f.Filter(parseUrl("http://ddict.me")) {
+		t.Error("UniqueFilter normal url")
+	}
+
+	if !f.Filter(parseUrl("http://ddict.me/haha")) {
+		t.Error("UniqueFilter normal url")
+	}
+
+	if !f.Filter(parseUrl("/")) {
+		t.Error("UniqueFilter normal url")
+	}
+
+	if f.Filter(parseUrl("ftp://ddo.me")) {
+		t.Error("UniqueFilter ftp url")
+	}
+
+	if f.Filter(parseUrl("javascript:void()")) {
+		t.Error("UniqueFilter javascript url")
+	}
+}
+
 func TestUniqueFilter(t *testing.T) {
 	f := &UniqueFilter{}
 
