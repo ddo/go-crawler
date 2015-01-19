@@ -13,13 +13,7 @@ type UniqueFilter struct {
 	urls []*url.URL
 }
 
-func (f *UniqueFilter) Filter(new_url string) bool {
-	u, err := parseUrl(new_url)
-
-	if err != nil {
-		return false
-	}
-
+func (f *UniqueFilter) Filter(u *url.URL) bool {
 	for _, old_u := range f.urls {
 		if *u == *old_u {
 			return false
@@ -36,33 +30,6 @@ type SameHostFilter struct {
 	root_url *url.URL
 }
 
-func NewSameHostFilter(url string) *SameHostFilter {
-	root_url, _ := parseUrl(url)
-
-	return &SameHostFilter{root_url}
-}
-
-func (f *SameHostFilter) Filter(new_url string) bool {
-	u, err := parseUrl(new_url)
-
-	if err != nil {
-		return false
-	}
-
+func (f *SameHostFilter) Filter(u *url.URL) bool {
 	return f.root_url.Host != u.Host
-}
-
-//parse url helper
-func parseUrl(new_url string) (*url.URL, error) {
-	u, err := url.Parse(new_url)
-
-	if err != nil {
-		return nil, err
-	}
-
-	if u.Path == "" {
-		u.Path = "/"
-	}
-
-	return u, nil
 }
