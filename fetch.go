@@ -3,11 +3,12 @@ package crawler
 import (
 	"io/ioutil"
 	"net/http"
+	"net/url"
 )
 
 //get html via http.get
-func get(url string) (string, error) {
-	res, err := http.Get(url)
+func get(u string) (string, error) {
+	res, err := http.Get(u)
 
 	if err != nil {
 		return "", err
@@ -24,12 +25,15 @@ func get(url string) (string, error) {
 	return string(html), nil
 }
 
-func Fetch(url string, f Picker) ([]string, error) {
-	html, err := get(url)
+func Fetch(root_url string, f Picker) (urls_obj []*url.URL, err error) {
+	html, err := get(root_url)
 
 	if err != nil {
 		return nil, err
 	}
+
+	//root url
+	root_url_obj, _ := url.Parse(root_url)
 
 	urls, err := f.Picker(html)
 
@@ -37,5 +41,12 @@ func Fetch(url string, f Picker) ([]string, error) {
 		return nil, err
 	}
 
-	return urls, nil
+	//update non host url
+	for _, v := range urls {
+		url_obj, _ := url.Parse(v)
+
+		urls_obj = append(urls_obj, root_url_obj.ResolveReference(url_obj))
+	}
+
+	return urls_obj, nil
 }
