@@ -41,5 +41,5 @@ type SameHostFilter struct {
 }
 
 func (f *SameHostFilter) Filter(u *url.URL) bool {
-	return f.root_url.Host != u.Host
+	return f.root_url.Host == u.Host
 }
