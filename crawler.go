@@ -7,6 +7,7 @@ import (
 type Crawler struct {
 	u       string
 	limit   int
+	worker  int
 	ch_url  chan string
 	ch_err  chan error
 	ch_done chan bool
@@ -63,39 +64,49 @@ loop:
 }
 
 func (c *Crawler) crawl(u string) {
+	c.worker++
+
 	urls, err := Fetch(u, c.picker)
 
 	if err != nil {
 		c.ch_err <- err
-		return
+	} else {
+
+	parent_loop:
+		for _, child_u_obj := range urls {
+			for _, f := range c.filters {
+				if !f.Filter(child_u_obj) {
+					continue parent_loop
+				}
+			}
+
+			//valid url
+			c.limit--
+
+			select {
+			case <-c.ch_done:
+				return
+			default:
+			}
+
+			if c.limit < 0 {
+				println("done by limit")
+				close(c.ch_done)
+				return
+			}
+
+			child_url := child_u_obj.String()
+
+			c.ch_url <- child_url
+
+			go c.crawl(child_url)
+		}
 	}
 
-parent_loop:
-	for _, child_u_obj := range urls {
-		for _, f := range c.filters {
-			if !f.Filter(child_u_obj) {
-				continue parent_loop
-			}
-		}
-
-		//valid url
-		c.limit--
-
-		select {
-		case <-c.ch_done:
-			return
-		default:
-		}
-
-		if c.limit < 0 {
-			close(c.ch_done)
-			return
-		}
-
-		child_url := child_u_obj.String()
-
-		c.ch_url <- child_url
-
-		go c.crawl(child_url)
+	//need to add delay here ?
+	c.worker--
+	if c.worker == 0 {
+		println("done by all worker done")
+		close(c.ch_done)
 	}
 }
