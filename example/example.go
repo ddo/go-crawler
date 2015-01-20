@@ -8,14 +8,18 @@ import (
 func main() {
 	no := 0
 
-	c := crawler.New("http://talktv.vn/", 50)
+	c := crawler.New("http://facebook.com/", 10)
 
-	c.Start(func(url string) {
+	receiver_url := func(url string) {
 		no++
 		fmt.Println(no, "\t ", url)
-	}, func(err error) {
+	}
+
+	receiver_err := func(err error) {
 		fmt.Println("error\t", err)
-	})
+	}
+
+	c.Start(receiver_url, receiver_err)
 
 	fmt.Println("done thanks god")
 }
