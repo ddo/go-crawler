@@ -1,11 +1,11 @@
-# go-crawler [![Build Status](1)](2) [![Coverage Status](3)](4)
+# go-crawler [![Build Status][travis-img]][travis-url] [![Build Status][coveralls-img]][coveralls-url]
 just a crawler in go
 
-[1]: https://img.shields.io/travis/ddo/go-crawler.svg?style=flat-square
-[2]: https://travis-ci.org/ddo/go-crawler
+[travis-img]: https://img.shields.io/travis/ddo/go-crawler.svg?style=flat-square
+[travis-url]: https://travis-ci.org/ddo/go-crawler
 
-[3]: https://img.shields.io/coveralls/ddo/go-crawler.svg?style=flat-square
-[4]: https://coveralls.io/r/ddo/go-crawler
+[coveralls-img]: https://img.shields.io/coveralls/ddo/go-crawler.svg?style=flat-square
+[coveralls-url]: https://coveralls.io/r/ddo/go-crawler
 
 > configable - concurrency
 
