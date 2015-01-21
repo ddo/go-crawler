@@ -51,9 +51,9 @@ func New(config *Config) *Crawler {
 		Picker: &AnchorPicker{},
 	}
 
-	//default filters
+	//default filters - url + unique
 	if filters == nil {
-		//unique filter
+		//http url filter
 		filter_url := &UrlFilter{}
 
 		//unique filter
@@ -61,12 +61,25 @@ func New(config *Config) *Crawler {
 			[]*url.URL{u},
 		}
 
+		filters = []Filter{filter_url, filter_unique}
+	}
+
+	//default scope - url + unique + same host
+	if scopes == nil {
+		//http url filter
+		scope_url := &UrlFilter{}
+
+		//unique filter
+		scope_unique := &UniqueFilter{
+			[]*url.URL{u},
+		}
+
 		//same host filter
-		filter_samehost := &SameHostFilter{
+		scope_samehost := &SameHostFilter{
 			u,
 		}
 
-		filters = []Filter{filter_url, filter_unique, filter_samehost}
+		scopes = []Filter{scope_url, scope_unique, scope_samehost}
 	}
 
 	return &Crawler{
@@ -110,33 +123,32 @@ func (c *Crawler) crawl(u *url.URL) {
 	if err != nil {
 		c.ch_err <- err
 	} else {
-
-	parent_loop:
-		for _, child_u_obj := range urls {
-			for _, f := range c.filters {
-				if !f.Filter(child_u_obj) {
-					continue parent_loop
-				}
-			}
-
-			//valid url
-			c.limit--
-
+		for _, u_child := range urls {
+			//any good idea else to handle better than this ? :((
+			//its ok, but i just dont like the syntax :D
 			select {
 			case <-c.ch_done:
 				return
 			default:
 			}
 
-			if c.limit < 0 {
-				println("done by limit")
-				close(c.ch_done)
-				return
+			//check filters
+			if c.checkFilters(c.filters, u_child) {
+				c.ch_url <- u_child.String()
+				c.limit--
+
+				if c.limit <= 0 {
+					println("done by limit")
+					close(c.ch_done)
+					return
+				}
 			}
 
-			c.ch_url <- child_u_obj.String()
-
-			go c.crawl(child_u_obj)
+			//check scope for next crawl
+			//yeah crawl but dont worry it's faster than run !
+			if c.checkFilters(c.scopes, u_child) {
+				go c.crawl(u_child)
+			}
 		}
 	}
 
