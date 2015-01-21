@@ -6,9 +6,12 @@ import (
 	"net/url"
 )
 
-//get html via http.get
-func get(u string) (string, error) {
-	res, err := http.Get(u)
+type Fetcher struct {
+	Client *http.Client
+}
+
+func (f *Fetcher) get(u *url.URL) (string, error) {
+	res, err := f.Client.Get(u.String())
 
 	if err != nil {
 		return "", err
@@ -25,17 +28,14 @@ func get(u string) (string, error) {
 	return string(html), nil
 }
 
-func Fetch(root_url string, f Picker) (urls_obj []*url.URL, err error) {
-	html, err := get(root_url)
+func (f *Fetcher) Fetch(u *url.URL, p Picker) (urls_obj []*url.URL, err error) {
+	html, err := f.get(u)
 
 	if err != nil {
 		return nil, err
 	}
 
-	//root url
-	root_url_obj, _ := url.Parse(root_url)
-
-	urls, err := f.Picker(html)
+	urls, err := p.Picker(html)
 
 	if err != nil {
 		return nil, err
@@ -43,9 +43,9 @@ func Fetch(root_url string, f Picker) (urls_obj []*url.URL, err error) {
 
 	//update non host url
 	for _, v := range urls {
-		url_obj, _ := url.Parse(v)
+		u_child, _ := url.Parse(v)
 
-		urls_obj = append(urls_obj, root_url_obj.ResolveReference(url_obj))
+		urls_obj = append(urls_obj, u.ResolveReference(u_child))
 	}
 
 	return urls_obj, nil
