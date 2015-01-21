@@ -15,7 +15,7 @@ func TestFetch(t *testing.T) {
 		Picker: &AnchorPicker{},
 	}
 
-	u, _ := url.Parse("http://ddict.me")
+	u, _ := url.Parse("http://facebook.com")
 
 	urls, err := f.Fetch(u)
 

@@ -8,11 +8,11 @@ import (
 func TestUrlFilter(t *testing.T) {
 	f := &UrlFilter{}
 
-	if !f.Filter(parseUrl("http://ddict.me")) {
+	if !f.Filter(parseUrl("http://facebook.com")) {
 		t.Error("UniqueFilter normal url")
 	}
 
-	if !f.Filter(parseUrl("http://ddict.me/haha")) {
+	if !f.Filter(parseUrl("http://facebook.com/haha")) {
 		t.Error("UniqueFilter normal url")
 	}
 
@@ -32,11 +32,11 @@ func TestUrlFilter(t *testing.T) {
 func TestUniqueFilter(t *testing.T) {
 	f := &UniqueFilter{}
 
-	if !f.Filter(parseUrl("http://ddict.me")) {
+	if !f.Filter(parseUrl("http://facebook.com")) {
 		t.Error("UniqueFilter init url")
 	}
 
-	if f.Filter(parseUrl("http://ddict.me")) {
+	if f.Filter(parseUrl("http://facebook.com")) {
 		t.Error("UniqueFilter duplicated url")
 	}
 
@@ -51,14 +51,14 @@ func TestUniqueFilter(t *testing.T) {
 
 func TestSameHostFilter(t *testing.T) {
 	f := &SameHostFilter{
-		parseUrl("http://ddict.me"),
+		parseUrl("http://facebook.com"),
 	}
 
-	if !f.Filter(parseUrl("http://ddict.me")) {
+	if !f.Filter(parseUrl("http://facebook.com")) {
 		t.Error("SameHostFilter same url")
 	}
 
-	if !f.Filter(parseUrl("http://ddict.me/haha")) {
+	if !f.Filter(parseUrl("http://facebook.com/haha")) {
 		t.Error("SameHostFilter same host")
 	}
 
@@ -66,7 +66,7 @@ func TestSameHostFilter(t *testing.T) {
 		t.Error("SameHostFilter diff host")
 	}
 
-	if f.Filter(parseUrl("http://dashboard.ddict.me")) {
+	if f.Filter(parseUrl("http://apps.facebook.com")) {
 		t.Error("SameHostFilter sub domain")
 	}
 }
