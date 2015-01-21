@@ -1,6 +1,8 @@
 language: go
 go:
-- '1.0'
-- '1.3'
-- tip
-- release
+    - '1.0'
+    - '1.3'
+    - tip
+    - release
+
+install: go get
