@@ -44,7 +44,12 @@ func (f *Fetcher) Fetch(u *url.URL) (urls_obj []*url.URL, err error) {
 
 	//update non host url
 	for _, v := range urls {
-		u_child, _ := url.Parse(v)
+		u_child, err := url.Parse(v)
+
+		//skip on invalid url
+		if err != nil {
+			continue
+		}
 
 		urls_obj = append(urls_obj, u.ResolveReference(u_child))
 	}

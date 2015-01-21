@@ -26,8 +26,12 @@ type Config struct {
 	Scopes  []Filter
 }
 
-func New(config *Config) *Crawler {
-	u, _ := url.Parse(config.Url)
+func New(config *Config) (*Crawler, error) {
+	u, err := url.Parse(config.Url)
+
+	if err != nil {
+		return nil, err
+	}
 
 	limit := config.Limit
 	client := config.Client
@@ -91,7 +95,7 @@ func New(config *Config) *Crawler {
 		fetcher: fetcher,
 		filters: filters,
 		scopes:  scopes,
-	}
+	}, nil
 }
 
 type receiver_url func(string)
