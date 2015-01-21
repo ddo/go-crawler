@@ -8,7 +8,7 @@ import (
 func TestAnchorPicker(t *testing.T) {
 	anchor := &AnchorPicker{}
 
-	urls, err := anchor.Picker("<a href='http://ddo.me'>test</a><a href='http://ddict.me'>test</a>")
+	urls, err := anchor.Pick("<a href='http://ddo.me'>test</a><a href='http://ddict.me'>test</a>")
 
 	if err != nil {
 		t.Fail()

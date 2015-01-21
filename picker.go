@@ -7,13 +7,13 @@ import (
 )
 
 type Picker interface {
-	Picker(string) ([]string, error)
+	Pick(string) ([]string, error)
 }
 
 //default picker
 type AnchorPicker struct{}
 
-func (p *AnchorPicker) Picker(html string) (urls []string, err error) {
+func (p *AnchorPicker) Pick(html string) (urls []string, err error) {
 	doc, err := goquery.NewDocumentFromReader(strings.NewReader(html))
 
 	if err != nil {
