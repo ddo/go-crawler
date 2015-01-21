@@ -138,7 +138,7 @@ func (c *Crawler) crawl(u *url.URL) {
 				c.limit--
 
 				if c.limit <= 0 {
-					println("done by limit")
+					// println("done by limit")
 					close(c.ch_done)
 					return
 				}
@@ -155,7 +155,7 @@ func (c *Crawler) crawl(u *url.URL) {
 	//need to add delay here ?
 	c.worker--
 	if c.worker == 0 {
-		println("done by all worker done")
+		// println("done by all worker done")
 		close(c.ch_done)
 	}
 }
