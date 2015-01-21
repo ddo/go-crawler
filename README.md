@@ -1,7 +1,7 @@
 # go-crawler
-crawler in go
+just a crawler in go
 
-> Project is not ready yet
+> configable - concurrency
 
 ## Quick Glance
 
