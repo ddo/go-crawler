@@ -8,6 +8,7 @@ import (
 
 type Fetcher struct {
 	Client *http.Client
+	Picker Picker
 }
 
 func (f *Fetcher) get(u *url.URL) (string, error) {
@@ -28,14 +29,14 @@ func (f *Fetcher) get(u *url.URL) (string, error) {
 	return string(html), nil
 }
 
-func (f *Fetcher) Fetch(u *url.URL, p Picker) (urls_obj []*url.URL, err error) {
+func (f *Fetcher) Fetch(u *url.URL) (urls_obj []*url.URL, err error) {
 	html, err := f.get(u)
 
 	if err != nil {
 		return nil, err
 	}
 
-	urls, err := p.Picker(html)
+	urls, err := f.Picker.Pick(html)
 
 	if err != nil {
 		return nil, err

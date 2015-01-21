@@ -9,14 +9,15 @@ import (
 
 func TestFetch(t *testing.T) {
 	f := Fetcher{
-		&http.Client{
+		Client: &http.Client{
 			Timeout: time.Second * 10,
 		},
+		Picker: &AnchorPicker{},
 	}
 
 	u, _ := url.Parse("http://ddict.me")
 
-	urls, err := f.Fetch(u, &AnchorPicker{})
+	urls, err := f.Fetch(u)
 
 	if err != nil {
 		t.Fail()
