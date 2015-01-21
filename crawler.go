@@ -15,21 +15,24 @@ type Crawler struct {
 	ch_done chan bool
 	fetcher Fetcher
 	filters []Filter
+	scopes  []Filter
 }
 
 type Config struct {
 	Url     string
 	Limit   int
-	Filters []Filter
 	Client  *http.Client
+	Filters []Filter
+	Scopes  []Filter
 }
 
 func New(config *Config) *Crawler {
 	u, _ := url.Parse(config.Url)
 
 	limit := config.Limit
-	filters := config.Filters
 	client := config.Client
+	filters := config.Filters
+	scopes := config.Scopes
 
 	//default limit - 50
 	if limit == 0 {
@@ -74,6 +77,7 @@ func New(config *Config) *Crawler {
 		ch_done: make(chan bool),
 		fetcher: fetcher,
 		filters: filters,
+		scopes:  scopes,
 	}
 }
 
