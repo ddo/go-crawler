@@ -1,34 +1,69 @@
 package crawler
 
 import (
+	"net/http"
 	"net/url"
+	"time"
 )
 
 type Crawler struct {
-	u       string
+	u       *url.URL
 	limit   int
 	worker  int
 	ch_url  chan string
 	ch_err  chan error
 	ch_done chan bool
-	picker  Picker
+	fetcher Fetcher
 	filters []Filter
 }
 
-func New(u string, limit int) *Crawler {
-	u_obj, _ := url.Parse(u)
+type Config struct {
+	Url     string
+	Limit   int
+	Filters []Filter
+	Client  *http.Client
+}
 
-	//unique filter
-	filter_url := &UrlFilter{}
+func New(config *Config) *Crawler {
+	u, _ := url.Parse(config.Url)
 
-	//unique filter
-	filter_unique := &UniqueFilter{
-		[]*url.URL{u_obj},
+	limit := config.Limit
+	filters := config.Filters
+	client := config.Client
+
+	//default limit - 50
+	if limit == 0 {
+		limit = 50
 	}
 
-	//same host filter
-	filter_samehost := &SameHostFilter{
-		u_obj,
+	//default client - timeout 10s
+	if client == nil {
+		client = &http.Client{
+			Timeout: time.Second * 10,
+		}
+	}
+
+	fetcher := Fetcher{
+		Client: client,
+		Picker: &AnchorPicker{},
+	}
+
+	//default filters
+	if filters == nil {
+		//unique filter
+		filter_url := &UrlFilter{}
+
+		//unique filter
+		filter_unique := &UniqueFilter{
+			[]*url.URL{u},
+		}
+
+		//same host filter
+		filter_samehost := &SameHostFilter{
+			u,
+		}
+
+		filters = []Filter{filter_url, filter_unique, filter_samehost}
 	}
 
 	return &Crawler{
@@ -37,8 +72,8 @@ func New(u string, limit int) *Crawler {
 		ch_url:  make(chan string),
 		ch_err:  make(chan error),
 		ch_done: make(chan bool),
-		picker:  &AnchorPicker{},
-		filters: []Filter{filter_url, filter_unique, filter_samehost},
+		fetcher: fetcher,
+		filters: filters,
 	}
 }
 
@@ -63,10 +98,10 @@ loop:
 	return
 }
 
-func (c *Crawler) crawl(u string) {
+func (c *Crawler) crawl(u *url.URL) {
 	c.worker++
 
-	urls, err := Fetch(u, c.picker)
+	urls, err := c.fetcher.Fetch(u)
 
 	if err != nil {
 		c.ch_err <- err
@@ -95,11 +130,9 @@ func (c *Crawler) crawl(u string) {
 				return
 			}
 
-			child_url := child_u_obj.String()
+			c.ch_url <- child_u_obj.String()
 
-			c.ch_url <- child_url
-
-			go c.crawl(child_url)
+			go c.crawl(child_u_obj)
 		}
 	}
 

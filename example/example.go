@@ -8,7 +8,9 @@ import (
 func main() {
 	no := 0
 
-	c := crawler.New("http://facebook.com/", 10)
+	c := crawler.New(&crawler.Config{
+		Url: "http://facebook.com/",
+	})
 
 	receiver_url := func(url string) {
 		no++
