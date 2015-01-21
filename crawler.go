@@ -143,3 +143,13 @@ func (c *Crawler) crawl(u *url.URL) {
 		close(c.ch_done)
 	}
 }
+
+func (c *Crawler) checkFilters(filters []Filter, u *url.URL) bool {
+	for _, f := range filters {
+		if !f.Filter(u) {
+			return false
+		}
+	}
+
+	return true
+}
