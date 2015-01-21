@@ -34,9 +34,9 @@ func New(config *Config) *Crawler {
 	filters := config.Filters
 	scopes := config.Scopes
 
-	//default limit - 50
+	//default limit - 10
 	if limit == 0 {
-		limit = 50
+		limit = 10
 	}
 
 	//default client - timeout 10s
