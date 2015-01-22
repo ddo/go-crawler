@@ -32,7 +32,7 @@ func main() {
 	filters := []crawler.Filter{filter_url, filter_unique, filter_samehost}
 	////////////////////define no external urls filter - end/////////////////
 
-	c := crawler.New(&crawler.Config{
+	c, _ := crawler.New(&crawler.Config{
 		Url:     url_str,
 		Filters: filters,
 	})

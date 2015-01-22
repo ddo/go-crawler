@@ -15,9 +15,14 @@ func main() {
 		default filter: http(s), no duplicated
 		default scope: 	http(s), no duplicated, same host only
 	*/
-	c := crawler.New(&crawler.Config{
+	c, err := crawler.New(&crawler.Config{
 		Url: "http://facebook.com/",
 	})
+
+	//your url is invalid
+	if err != nil {
+		panic(err)
+	}
 
 	//url handler
 	receiver_url := func(url string) {
