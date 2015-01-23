@@ -77,10 +77,10 @@ done
 * [x] init with Filter
 * [x] init with http.Client
 * [x] crawler testing
+* [x] travis-ci
+* [x] coveralls.io
 * [ ] init with Fetcher
 * [ ] mutex/chan limit/worker counter
 * [ ] delay
-* [ ] travis-ci
-* [ ] coveralls.io
 * [ ] README advanced doc
 
