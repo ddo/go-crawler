@@ -1,34 +1,51 @@
 package crawler
 
 import (
-	"strings"
+	"io"
 
-	"github.com/PuerkitoBio/goquery"
+	"golang.org/x/net/html"
 )
 
 type Picker interface {
-	Pick(string) ([]string, error)
+	Pick(r io.Reader) ([]string, error)
 }
 
 //default picker
-type PickerAnchor struct{}
+type PickerAttr struct {
+	TagName string
+	Attr    string
+}
 
-func (p *PickerAnchor) Pick(html string) (urls []string, err error) {
-	doc, err := goquery.NewDocumentFromReader(strings.NewReader(html))
+func (p *PickerAttr) Pick(r io.Reader) (data []string, err error) {
+	z := html.NewTokenizer(r)
 
-	if err != nil {
-		return nil, err
+	for {
+		tt := z.Next()
+
+		switch tt {
+		case html.ErrorToken:
+			if z.Err() == io.EOF {
+				return data, nil
+			}
+
+		case html.StartTagToken:
+			tag_name, attr := z.TagName()
+
+			if string(tag_name) != p.TagName {
+				continue
+			}
+
+			var key, value []byte
+
+			for attr {
+				key, value, attr = z.TagAttr()
+
+				if string(key) == p.Attr {
+					data = append(data, string(value))
+				}
+			}
+		}
 	}
 
-	doc.Find("a").Each(func(i int, a *goquery.Selection) {
-		url, exist := a.Attr("href")
-
-		if !exist {
-			return
-		}
-
-		urls = append(urls, url)
-	})
-
-	return urls, nil
+	return data, z.Err()
 }

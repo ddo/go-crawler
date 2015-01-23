@@ -50,9 +50,14 @@ func New(config *Config) (*Crawler, error) {
 		}
 	}
 
+	anchor_picker := &PickerAttr{
+		TagName: "a",
+		Attr:    "href",
+	}
+
 	fetcher := Fetcher{
 		Client: client,
-		Picker: &PickerAnchor{},
+		Picker: anchor_picker,
 	}
 
 	//default filters - url + unique
