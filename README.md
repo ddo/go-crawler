@@ -1,5 +1,5 @@
 # go-crawler [![Build Status][travis-img]][travis-url] [![Build Status][coveralls-img]][coveralls-url]
-just a crawler in go
+just a awesome crawler in go
 
 [travis-img]: https://img.shields.io/travis/ddo/go-crawler.svg?style=flat-square
 [travis-url]: https://travis-ci.org/ddo/go-crawler
@@ -7,7 +7,11 @@ just a crawler in go
 [coveralls-img]: https://img.shields.io/coveralls/ddo/go-crawler.svg?style=flat-square
 [coveralls-url]: https://coveralls.io/r/ddo/go-crawler
 
+[playground-url]: https://go-crawler.herokuapp.com/
+
 > configable - concurrency
+
+## [Playground][playground-url]
 
 ## Quick Glance
 
