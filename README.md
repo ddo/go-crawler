@@ -1,5 +1,5 @@
 # go-crawler [![Build Status][travis-img]][travis-url] [![Build Status][coveralls-img]][coveralls-url]
-just a awesome crawler in go
+just an awesome crawler in go
 
 [travis-img]: https://img.shields.io/travis/ddo/go-crawler.svg?style=flat-square
 [travis-url]: https://travis-ci.org/ddo/go-crawler
