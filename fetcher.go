@@ -4,6 +4,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
+	"strings"
 )
 
 type Fetcher struct {
@@ -11,11 +12,11 @@ type Fetcher struct {
 	Picker Picker
 }
 
-func (f *Fetcher) get(u *url.URL) (string, error) {
+func (f *Fetcher) get(u *url.URL) (*strings.Reader, error) {
 	res, err := f.Client.Get(u.String())
 
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 
 	defer res.Body.Close()
@@ -23,10 +24,10 @@ func (f *Fetcher) get(u *url.URL) (string, error) {
 	html, err := ioutil.ReadAll(res.Body)
 
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 
-	return string(html), nil
+	return strings.NewReader(string(html)), nil
 }
 
 func (f *Fetcher) Fetch(u *url.URL) (urls_obj []*url.URL, err error) {
