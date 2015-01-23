@@ -79,6 +79,7 @@ done
 * [x] crawler testing
 * [x] travis-ci
 * [x] coveralls.io
+* [ ] non utf-8 issue
 * [ ] init with Fetcher
 * [ ] mutex/chan limit/worker counter
 * [ ] delay
