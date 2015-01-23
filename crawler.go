@@ -148,7 +148,13 @@ func (c *Crawler) crawl(u *url.URL) {
 
 				if c.limit <= 0 {
 					// println("done by limit")
-					close(c.ch_done)
+
+					select {
+					case <-c.ch_done:
+						return
+					default:
+						close(c.ch_done)
+					}
 					return
 				}
 			}
@@ -165,7 +171,13 @@ func (c *Crawler) crawl(u *url.URL) {
 	c.worker--
 	if c.worker == 0 {
 		// println("done by all worker done")
-		close(c.ch_done)
+
+		select {
+		case <-c.ch_done:
+			return
+		default:
+			close(c.ch_done)
+		}
 	}
 }
 
