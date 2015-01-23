@@ -12,7 +12,7 @@ func TestFetch(t *testing.T) {
 		Client: &http.Client{
 			Timeout: time.Second * 10,
 		},
-		Picker: &AnchorPicker{},
+		Picker: &PickerAnchor{},
 	}
 
 	u, _ := url.Parse("http://facebook.com")

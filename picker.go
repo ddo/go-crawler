@@ -11,9 +11,9 @@ type Picker interface {
 }
 
 //default picker
-type AnchorPicker struct{}
+type PickerAnchor struct{}
 
-func (p *AnchorPicker) Pick(html string) (urls []string, err error) {
+func (p *PickerAnchor) Pick(html string) (urls []string, err error) {
 	doc, err := goquery.NewDocumentFromReader(strings.NewReader(html))
 
 	if err != nil {

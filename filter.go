@@ -8,19 +8,19 @@ type Filter interface {
 	Filter(*url.URL) bool
 }
 
-//is url Filter
-type UrlFilter struct{}
+//is http url Filter
+type FilterUrl struct{}
 
-func (f *UrlFilter) Filter(u *url.URL) bool {
+func (f *FilterUrl) Filter(u *url.URL) bool {
 	return u.Scheme == "" || u.Scheme == "http" || u.Scheme == "https"
 }
 
 //no duplicated Filter
-type UniqueFilter struct {
+type FilterUnique struct {
 	Us []*url.URL
 }
 
-func (f *UniqueFilter) Filter(u *url.URL) bool {
+func (f *FilterUnique) Filter(u *url.URL) bool {
 	for _, old_u := range f.Us {
 		if *u == *old_u {
 			return false
@@ -43,10 +43,10 @@ func (f *UniqueFilter) Filter(u *url.URL) bool {
 }
 
 //same hostname only
-type SameHostFilter struct {
+type FilterSameHost struct {
 	U *url.URL
 }
 
-func (f *SameHostFilter) Filter(u *url.URL) bool {
+func (f *FilterSameHost) Filter(u *url.URL) bool {
 	return f.U.Host == u.Host
 }

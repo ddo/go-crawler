@@ -5,69 +5,69 @@ import (
 	"testing"
 )
 
-func TestUrlFilter(t *testing.T) {
-	f := &UrlFilter{}
+func TestFilterUrl(t *testing.T) {
+	f := &FilterUrl{}
 
 	if !f.Filter(parseUrl("http://facebook.com")) {
-		t.Error("UniqueFilter normal url")
+		t.Error("FilterUrl normal url")
 	}
 
 	if !f.Filter(parseUrl("http://facebook.com/haha")) {
-		t.Error("UniqueFilter normal url")
+		t.Error("FilterUrl normal url")
 	}
 
 	if !f.Filter(parseUrl("/")) {
-		t.Error("UniqueFilter normal url")
+		t.Error("FilterUrl normal url")
 	}
 
 	if f.Filter(parseUrl("ftp://ddo.me")) {
-		t.Error("UniqueFilter ftp url")
+		t.Error("FilterUrl ftp url")
 	}
 
 	if f.Filter(parseUrl("javascript:void()")) {
-		t.Error("UniqueFilter javascript url")
+		t.Error("FilterUrl javascript url")
 	}
 }
 
-func TestUniqueFilter(t *testing.T) {
-	f := &UniqueFilter{}
+func TestFilterUnique(t *testing.T) {
+	f := &FilterUnique{}
 
 	if !f.Filter(parseUrl("http://facebook.com")) {
-		t.Error("UniqueFilter init url")
+		t.Error("FilterUnique init url")
 	}
 
 	if f.Filter(parseUrl("http://facebook.com")) {
-		t.Error("UniqueFilter duplicated url")
+		t.Error("FilterUnique duplicated url")
 	}
 
 	if !f.Filter(parseUrl("http://ddo.me")) {
-		t.Error("UniqueFilter new url")
+		t.Error("FilterUnique new url")
 	}
 
 	if f.Filter(parseUrl("http://ddo.me#hello")) {
-		t.Error("UniqueFilter ignore fragment")
+		t.Error("FilterUnique ignore fragment")
 	}
 }
 
-func TestSameHostFilter(t *testing.T) {
-	f := &SameHostFilter{
+func TestFilterSameHost(t *testing.T) {
+	f := &FilterSameHost{
 		parseUrl("http://facebook.com"),
 	}
 
 	if !f.Filter(parseUrl("http://facebook.com")) {
-		t.Error("SameHostFilter same url")
+		t.Error("FilterSameHost same url")
 	}
 
 	if !f.Filter(parseUrl("http://facebook.com/haha")) {
-		t.Error("SameHostFilter same host")
+		t.Error("FilterSameHost same host")
 	}
 
 	if f.Filter(parseUrl("http://ddo.me")) {
-		t.Error("SameHostFilter diff host")
+		t.Error("FilterSameHost diff host")
 	}
 
 	if f.Filter(parseUrl("http://apps.facebook.com")) {
-		t.Error("SameHostFilter sub domain")
+		t.Error("FilterSameHost sub domain")
 	}
 }
 

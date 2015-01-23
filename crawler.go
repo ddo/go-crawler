@@ -52,16 +52,16 @@ func New(config *Config) (*Crawler, error) {
 
 	fetcher := Fetcher{
 		Client: client,
-		Picker: &AnchorPicker{},
+		Picker: &PickerAnchor{},
 	}
 
 	//default filters - url + unique
 	if filters == nil {
 		//http url filter
-		filter_url := &UrlFilter{}
+		filter_url := &FilterUrl{}
 
 		//unique filter
-		filter_unique := &UniqueFilter{
+		filter_unique := &FilterUnique{
 			[]*url.URL{u},
 		}
 
@@ -71,15 +71,15 @@ func New(config *Config) (*Crawler, error) {
 	//default scope - url + unique + same host
 	if scopes == nil {
 		//http url filter
-		scope_url := &UrlFilter{}
+		scope_url := &FilterUrl{}
 
 		//unique filter
-		scope_unique := &UniqueFilter{
+		scope_unique := &FilterUnique{
 			[]*url.URL{u},
 		}
 
 		//same host filter
-		scope_samehost := &SameHostFilter{
+		scope_samehost := &FilterSameHost{
 			u,
 		}
 

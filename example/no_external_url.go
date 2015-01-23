@@ -17,15 +17,15 @@ func main() {
 	u, _ := url.Parse(url_str)
 
 	//url filter, http url only (no ftp etc)
-	filter_url := &crawler.UrlFilter{}
+	filter_url := &crawler.FilterUrl{}
 
 	//unique filter, no duplicated url
-	filter_unique := &crawler.UniqueFilter{
+	filter_unique := &crawler.FilterUnique{
 		[]*url.URL{u},
 	}
 
 	//same host filter, NO EXTERNAL links
-	filter_samehost := &crawler.SameHostFilter{
+	filter_samehost := &crawler.FilterSameHost{
 		u,
 	}
 

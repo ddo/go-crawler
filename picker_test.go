@@ -5,8 +5,8 @@ import (
 	"testing"
 )
 
-func TestAnchorPicker(t *testing.T) {
-	anchor := &AnchorPicker{}
+func TestPickerAnchor(t *testing.T) {
+	anchor := &PickerAnchor{}
 
 	urls, err := anchor.Pick("<a href='http://ddo.me'>test</a><a href='http://ddict.me'>test</a>")
 
