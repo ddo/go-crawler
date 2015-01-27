@@ -133,12 +133,8 @@ func (c *Crawler) crawl(u *url.URL) {
 		c.ch_err <- err
 	} else {
 		for _, u_child := range urls {
-			//any good idea else to handle better than this ? :((
-			//its ok, but i just dont like the syntax :D
-			select {
-			case <-c.ch_done:
+			if c.isDone() {
 				return
-			default:
 			}
 
 			//check filters
@@ -149,10 +145,7 @@ func (c *Crawler) crawl(u *url.URL) {
 				if c.limit <= 0 {
 					// println("done by limit")
 
-					select {
-					case <-c.ch_done:
-						return
-					default:
+					if !c.isDone() {
 						close(c.ch_done)
 					}
 					return
@@ -172,10 +165,7 @@ func (c *Crawler) crawl(u *url.URL) {
 	if c.worker == 0 {
 		// println("done by all worker done")
 
-		select {
-		case <-c.ch_done:
-			return
-		default:
+		if !c.isDone() {
 			close(c.ch_done)
 		}
 	}
@@ -189,4 +179,13 @@ func (c *Crawler) checkFilters(filters []Filter, u *url.URL) bool {
 	}
 
 	return true
+}
+
+func (c *Crawler) isDone() bool {
+	select {
+	case <-c.ch_done:
+		return true
+	default:
+		return false
+	}
 }
